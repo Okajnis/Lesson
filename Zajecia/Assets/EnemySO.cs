@@ -6,4 +6,10 @@ public class EnemySO : ScriptableObject
     public string enemyName;
     public int enemyHP;
     public int enemyDamage;
+
+
+
 }
+
+
+
