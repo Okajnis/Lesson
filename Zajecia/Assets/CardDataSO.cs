@@ -6,6 +6,7 @@ public class CardDataSO : ScriptableObject
     public string cardName;
     public int hP;
     public int damage;
+    public Material cardmat;
     [TextArea] public string designIdea;
 
     public void SayHello()

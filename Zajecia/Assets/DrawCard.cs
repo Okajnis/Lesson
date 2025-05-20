@@ -13,6 +13,8 @@ public class DrawCard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI cardNameText; //lista do tekstów
     [SerializeField] private TextMeshProUGUI enemyCardNameText;
     [SerializeField] private TextMeshProUGUI resultText;
+    [SerializeField] private Renderer playerRenderer;
+    [SerializeField] private Renderer enemyRenderer;
      
     private List<CardDataSO> remainingCardsList; //lista kart
     private List<CardDataSO> remainingEnemyCardsList;
@@ -42,10 +44,12 @@ public class DrawCard : MonoBehaviour
 
         int randomIndex = Random.Range(0, remainingCardsList.Count); //random range - liczba losowa od 0 do iloœci liczb w liœcie
         CardDataSO selectedCard = remainingCardsList[randomIndex]; //wybiera siê karte losow¹ kartê o indeksie randomIndex
+        playerRenderer.material = selectedCard.cardmat; //ustawia materia³ dla kart
         remainingCardsList.RemoveAt(randomIndex); //usuwamy kartê, któr¹ wybraliœmy
 
         int computerIndex = Random.Range(0, remainingEnemyCardsList.Count); //random range - liczba losowa od 0 do iloœci liczb w liœcie
         CardDataSO selectedEnemyCard = remainingEnemyCardsList[computerIndex]; //wybiera siê karte losow¹ kartê o indeksie randomIndex
+        enemyRenderer.material = selectedEnemyCard.cardmat; //ustawia materia³ dla karty
         remainingEnemyCardsList.RemoveAt(computerIndex); //usuwamy kartê, któr¹ wybraliœmy
 
         DisplayCardName(selectedCard); //wyœwietl nazwê karty, któr¹ wybraliœmy
@@ -67,12 +71,16 @@ public class DrawCard : MonoBehaviour
             enemyCardNameText.text = enemyInfo;
 
             resultText.text = " Wygra³ Gracz ";
+
+            remainingCardsList.Add(enemy);
         }
         else if (player.damage < enemy.damage)
         {
             enemyCardNameText.text = enemyInfo;
 
             resultText.text = " Wygra³ Przeciwnik";
+
+            remainingEnemyCardsList.Add(player);
         }
         else
         {
