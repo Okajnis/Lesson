@@ -15,6 +15,8 @@ public class DrawCard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultText;
     [SerializeField] private Renderer playerRenderer;
     [SerializeField] private Renderer enemyRenderer;
+    [SerializeField] private int playerPoints = 52;
+    [SerializeField] private int enemyPoints = 52;
      
     private List<CardDataSO> remainingCardsList; //lista kart
     private List<CardDataSO> remainingEnemyCardsList;
@@ -33,10 +35,16 @@ public class DrawCard : MonoBehaviour
         {
             ShuffleCard();
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            {
+            Surrender();
+            }
     }
 
     private void ShuffleCard()
     {
+
         if (remainingCardsList.Count == 0||remainingEnemyCardsList.Count == 0) //jeœli lista wyniesie 0
         {
             return; //zakoñczenie funkcji - return
@@ -56,6 +64,39 @@ public class DrawCard : MonoBehaviour
         SelectCardObject(selectedCard); //wybraæ obiekt karty, któr¹ wybraliœmy
         SelectEnemyCardObject(selectedEnemyCard);
         CompareCards(selectedCard, selectedEnemyCard);
+
+        if (selectedCard.cardName == "aspik") //jeœli gracz wybierze as pik - punkty zeruje
+        {
+            playerPoints = 0;
+            Debug.Log("Gracz trafi³ na Asa! - punkty wyzerowane!");
+        }
+        else if (selectedEnemyCard.cardName == "aspik")
+        {
+            enemyPoints = 0;
+            Debug.Log("Komputer trafi³ na Asa Pik! - punkty wyzerowane!");
+        }
+
+
+        bool playerDouble = selectedCard.cardName == "krolkaro"; //bool to minimalna wartoœæ (prawda fa³sz)
+        bool enemyDouble = selectedEnemyCard.cardName == "krolkaro";
+        int karoPoints = 5;
+
+
+
+        if (playerDouble) //jeœli gracz ma krolkaro - dostaje + 5 pkt.
+        {
+            playerPoints += karoPoints; //staraæ siê liczby pakowaæ w funkcje int np 
+        }
+        else if (enemyDouble)
+        {
+            enemyPoints += karoPoints;
+        }
+    }
+
+    public void Surrender()
+    {
+        resultText.text = "Podda³eœ siê! Przegra³eœ!";
+        enabled = false; //wy³¹cza update i wszystko
     }
 
     private void DisplayCardName(CardDataSO card) 
@@ -65,6 +106,7 @@ public class DrawCard : MonoBehaviour
     private void CompareCards(CardDataSO player, CardDataSO enemy)
     {
         string enemyInfo = enemy.cardName + " Damage Komputera: " + enemy.damage;
+
 
         if (player.damage > enemy.damage)
         {
